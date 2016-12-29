@@ -30,7 +30,7 @@ class KNN:
       self._add(state, r)
       
   def knn_value(self, state, k):
-    if self._current_capacity == 0:
+    if self._current_capacity < k:
       return 0.0
 
     _, indices = self._tree.query([state], k=k)

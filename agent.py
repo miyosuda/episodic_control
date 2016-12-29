@@ -19,40 +19,52 @@ class FrameBuffer(object):
 
 
 class EpisodicControl(object):
-  def __init__(self, qec_table, num_actions):
+  def __init__(self, environment, qec_table, num_actions):
+    self._environment = environment
     self._qec_table = qec_table    
     self._gamma = 0.99
     self._epsilon = 0.005
     self._num_actions = num_actions
+
+    self._reset()
     
-  def start_episode(self, observation):
+  def _reset(self):
+    self._frame_buffer = FrameBuffer()    
     self._episode_reward = 0
-    self._frame_buffer = FrameBuffer()
-
-    action = 0
-    self._last_action = action
-    self._last_observation = observation
-    return action
   
-  def step(self, reward, observation):
-    self._episode_reward += reward
-
+  def step(self):
+    """
+    Return: Episode reward when episode ends. Otherwise None.
+    """
+    last_observation = environment.last_observation
     # Choose action based on QEC table
-    action = self._choose_action(observation,
-                                 np.clip(reward, -1, 1))
+    action = self._choose_action(last_observation)
+    _, reward, terminal = self._environment.step(last_observation)
 
-    self._last_action = action
-    self._last_observation = observation
-    return action
-  
-  def end_episode(self, reward):
-    self._episode_reward += reward
+    # Record frame
+    self._frame_buffer.add_frame(last_observation,
+                                 action,
+                                 np.clip(reward, -1, 1))
     
-    # record frame
-    self._frame_buffer.add_frame(self.last_observation,
-                                 self.last_action,
-                                 np.clip(reward, -1, 1))
+    self._episode_reward += reward
 
+    # Update QEC table when episode ends
+    if terminal:
+      self._update_qec_table()
+      episode_reward = self._episode_reward
+      self._reset()
+      return episode_reward
+    else:
+      return None
+
+  def _choose_action(self, observation):
+    # epsilon greedy
+    if np.random.rand() < self._epsilon:
+      return np.random.randint(0, self._num_actions)
+    else:
+      return self._qec_table.get_max_qec_action(observation)
+
+  def _update_qec_table(self):
     # Update QEC table
     R = 0.0
     # len-1から0まで降順
@@ -63,27 +75,3 @@ class EpisodicControl(object):
       # 求めたQEC値で、QECテーブルの値を更新
       # (エントリにヒットしたら値を更新し、ヒットしない場合はエントリを追加)
       self._qec_table.update(frame.observation, frame.action, R)
-
-  def _choose_action(self, observation, reward):
-    # フレームを記録 (actionは前回のものを利用)
-    self._frame_buffer.add_frame(self._last_observation,
-                                 self._last_action,
-                                 reward)
-
-    # epsilon greedy
-    if np.random.rand() < self._epsilon:
-      return np.random.randint(0, self._num_actions)
-
-    # 最大のQECのactionを探してきて返す
-    value = float("-inf")
-    max_action = 0
-    
-    # argmax(Q(s,a))
-    for action in range(self._num_actions):
-      # QECテーブルを元に、state, actionをからQEC値を推定する
-      value_t = self._qec_table.estimate(observation, action)
-      if value_t > value:
-        value = value_t
-        max_action = action
-
-    return max_action
