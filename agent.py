@@ -18,8 +18,8 @@ class FrameBuffer(object):
     self.frames.append(frame)
 
 
-class EpisodicControl(object, qec_table, num_actions):
-  def __init__(self):
+class EpisodicControl(object):
+  def __init__(self, qec_table, num_actions):
     self._qec_table = qec_table    
     self._gamma = 0.99
     self._epsilon = 0.005
@@ -62,7 +62,7 @@ class EpisodicControl(object, qec_table, num_actions):
       R = R * self._gamma + frame.reward
       # 求めたQEC値で、QECテーブルの値を更新
       # (エントリにヒットしたら値を更新し、ヒットしない場合はエントリを追加)
-      self.qec_table.update(frame.observation, frame.action, R)
+      self._qec_table.update(frame.observation, frame.action, R)
 
   def _choose_action(self, observation, reward):
     # フレームを記録 (actionは前回のものを利用)
