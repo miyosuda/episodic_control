@@ -2,7 +2,7 @@
 from __future__ import division
 from __future__ import print_function
 
-USE_LAB = False
+USE_LAB = True
 
 class Environment(object):
   # cached action size
