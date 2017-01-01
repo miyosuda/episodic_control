@@ -1,4 +1,5 @@
-**.pyc
+*.pyc
+*/*.pyc
 log/*
 checkpoints*/*
 .DS_Store
