@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
 import numpy as np
-from environment import Environment
-from projection import Projection
-from qec_table import QECTable
-from agent import EpisodicControlAgent
+from environment.environment import Environment
+from ec.projection import Projection
+from ec.qec_table import QECTable
+from agent.agent import EpisodicControlAgent
 
 k = 50
 knn_capacity = 100000
@@ -16,6 +15,8 @@ state_dim = 64
 gamma = 0.99
 
 num_actions = Environment.get_action_size()
+print("action size={0}".format(num_actions))
+
 environment = Environment.create_environment()
 projection = Projection(observation_dim, state_dim)
 

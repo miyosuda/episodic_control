@@ -1,5 +1,6 @@
-*.pyc
+**.pyc
 log/*
 checkpoints*/*
 .DS_Store
 memo.txt
+*.png
