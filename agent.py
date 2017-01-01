@@ -18,7 +18,7 @@ class FrameBuffer(object):
     self.frames.append(frame)
 
 
-class EpisodicControl(object):
+class EpisodicControlAgent(object):
   def __init__(self, environment, qec_table, num_actions):
     self._environment = environment
     self._qec_table = qec_table    
@@ -29,17 +29,18 @@ class EpisodicControl(object):
     self._reset()
     
   def _reset(self):
-    self._frame_buffer = FrameBuffer()    
+    self._frame_buffer = FrameBuffer()
     self._episode_reward = 0
   
   def step(self):
     """
-    Return: Episode reward when episode ends. Otherwise None.
+    Returns:
+      Episode reward when episode ends. Otherwise None.
     """
-    last_observation = environment.last_observation
+    last_observation = self._environment.last_observation
     # Choose action based on QEC table
     action = self._choose_action(last_observation)
-    _, reward, terminal = self._environment.step(last_observation)
+    _, reward, terminal = self._environment.step(action)
 
     # Record frame
     self._frame_buffer.add_frame(last_observation,
@@ -65,11 +66,11 @@ class EpisodicControl(object):
       return self._qec_table.get_max_qec_action(observation)
 
   def _update_qec_table(self):
-    # Update QEC table
+    """ Update QEC table """
     R = 0.0
     # len-1から0まで降順
-    for i in range(len(self.frame_buffer.frames)-1, -1, -1):
-      frame = self.frame_buffer.frames[i]
+    for i in range(len(self._frame_buffer.frames)-1, -1, -1):
+      frame = self._frame_buffer.frames[i]
       # discountしていく
       R = R * self._gamma + frame.reward
       # 求めたQEC値で、QECテーブルの値を更新

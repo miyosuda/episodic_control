@@ -4,6 +4,7 @@ from sklearn.neighbors import KDTree
 
 
 class KNN:
+  """ K Nearest-Neighbor with LRU. """
   def __init__(self, capacity, state_dim):
     self._capacity = capacity
     self._states = np.zeros((capacity, state_dim))

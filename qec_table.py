@@ -39,7 +39,7 @@ class QECTable(object):
     # argmax(Q(s,a))
     for action in range(self._num_actions):
       # QECテーブルを元に、state, actionをからQEC値を推定する
-      q_t = self._estimate(observation, action)
+      q_t = self._estimate(state, action)
       if q_t > q:
         q = q_t
         max_action = action
