@@ -53,7 +53,8 @@ class Environment(object):
   def random_step(self):
     num_actions = Environment.get_action_size()
     action = np.random.randint(num_actions)
-    observation, reward, terminal = self.step(action)
+    observation = self.last_observation
+    reward, terminal = self.step(action)
     if terminal:
       self.reset()
     return observation

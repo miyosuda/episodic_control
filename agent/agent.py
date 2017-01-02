@@ -44,7 +44,7 @@ class EpisodicControlAgent(object):
     last_observation = self._environment.last_observation
     # Choose action based on QEC table
     action = self._choose_action(last_observation)
-    _, reward, terminal = self._environment.step(action)
+    reward, terminal = self._environment.step(action)
 
     # Record frame
     self._frame_buffer.add_frame(last_observation,

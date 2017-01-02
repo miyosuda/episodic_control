@@ -67,6 +67,7 @@ class LabEnvironment(environment.Environment):
     reward = self._env.step(real_action, num_steps=4)
     terminal = not self._env.is_running()
 
-    obs = self._env.observations()['RGB_INTERLACED']
-    self.last_observation = self._preprocess_frame(obs)
-    return self.last_observation, reward, terminal
+    if not terminal:
+      obs = self._env.observations()['RGB_INTERLACED']
+      self.last_observation = self._preprocess_frame(obs)
+    return reward, terminal

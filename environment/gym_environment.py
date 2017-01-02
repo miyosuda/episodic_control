@@ -49,8 +49,10 @@ class GymEnvironment(environment.Environment):
       reward += r
       if terminal:
         break
-    self.last_observation = self._preprocess_frame(obs)
-    return self.last_observation, reward, terminal
+
+    if not terminal:
+      self.last_observation = self._preprocess_frame(obs)
+    return reward, terminal
     
     
     

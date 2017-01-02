@@ -22,11 +22,11 @@ class TestGameEnvironment(unittest.TestCase):
       self.assertTrue( action_size == 8 )
 
     for i in range(3):
-      observation, reward, terminal = environment.step(0)
-      self.assertTrue( observation.shape == (84,84) )
-      
+      self.assertTrue( environment.last_observation.shape == (84,84) )
       if SAVE_IMAGE:
-        scipy.misc.imsave("debug_observation{0}.png".format(i), observation)
+        scipy.misc.imsave("debug_observation{0}.png".format(i), environment.last_observation)
+      reward, terminal = environment.step(0)
+
 
   def test_random_step(self):
     environment = Environment.create_environment()
