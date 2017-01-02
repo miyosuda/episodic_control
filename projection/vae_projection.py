@@ -10,8 +10,8 @@ from projection.projection import Projection
 from projection.vae import VAE
 
 
-TRAIN_LOG_INTERVAL = 1
-TRAIN_SAVE_INTERVAL = 10
+TRAIN_LOG_INTERVAL = 10
+TRAIN_SAVE_INTERVAL = 1000
 CHECKPOINT_DIR = 'checkpoints'
 
 
