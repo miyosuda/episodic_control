@@ -188,6 +188,6 @@ class VAE(object):
 
   def reconstruct(self, sess, X):
     """ Reconstruct X """    
-    # Not sampling output with Gaussian.    
+    # Not sampling output with Gaussian.
     return sess.run(self.x_reconstr_mean,
                     feed_dict={self.x: X})

@@ -4,12 +4,14 @@ from __future__ import division
 from __future__ import print_function
 
 import sys
+import numpy as np
 
 
 USE_LAB = True
 if sys.platform == 'darwin':
   # On MacOSX, use gym instead of deepmind lab for test
   USE_LAB = False
+
 
 class Environment(object):
   # cached action size
@@ -42,8 +44,16 @@ class Environment(object):
   def __init__(self):
     pass
 
-  def process(self, action):
+  def step(self, action):
     pass
 
   def reset(self):
     pass
+
+  def random_step(self):
+    num_actions = Environment.get_action_size()
+    action = np.random.randint(num_actions)
+    observation, reward, terminal = self.step(action)
+    if terminal:
+      self.reset()
+    return observation
