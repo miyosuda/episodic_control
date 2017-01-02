@@ -1,5 +1,3 @@
-
-
 Add lines below to lab/BUILD file.
 
 ```
@@ -23,11 +21,11 @@ py_test(
 To run training, run command below in 'lab' directory.
 
 ```
-$ bazel run :ec_train --define headless=osmesa
+$ bazel run :ec_train --define headless=glx
 ```
 
 To run test,
 
 ```
-$ bazel run :ec_test --define headless=osmesa
+$ bazel run :ec_test --define headless=glx
 ```

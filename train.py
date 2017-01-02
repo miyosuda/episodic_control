@@ -20,7 +20,7 @@ vae_train_step_size = 400000
 vae_train_batch_size = 100
 
 
-sess = tf.Session()
+
 
 num_actions = Environment.get_action_size()
 environment = Environment.create_environment()
@@ -31,6 +31,8 @@ qec_table = QECTable(projection, state_dim, num_actions, k, knn_capacity)
 
 agent = EpisodicControlAgent(environment, qec_table, num_actions, gamma, epsilon)
 
+# Session should be started after Lab environment is created. (To run Lab with GPU)
+sess = tf.Session()
 init = tf.global_variables_initializer()
 sess.run(init)
 

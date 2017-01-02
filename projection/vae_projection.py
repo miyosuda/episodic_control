@@ -11,7 +11,7 @@ from projection.vae import VAE
 
 
 TRAIN_LOG_INTERVAL = 10
-TRAIN_SAVE_INTERVAL = 1000
+TRAIN_SAVE_INTERVAL = 100
 CHECKPOINT_DIR = 'checkpoints'
 
 
@@ -74,4 +74,3 @@ class VAEProjection(Projection):
       if step % TRAIN_SAVE_INTERVAL == 0:
         # Save checkpoint
         self._save(sess, saver, step)
-
