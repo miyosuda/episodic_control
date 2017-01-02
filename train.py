@@ -5,7 +5,7 @@ from __future__ import print_function
 
 import numpy as np
 from environment.environment import Environment
-from ec.projection import Projection
+from projection.random_projection import RandomProjection
 from ec.qec_table import QECTable
 from agent.agent import EpisodicControlAgent
 
@@ -20,7 +20,7 @@ num_actions = Environment.get_action_size()
 print("action size={0}".format(num_actions))
 
 environment = Environment.create_environment()
-projection = Projection(observation_dim, state_dim)
+projection = RandomProjection(observation_dim, state_dim)
 
 qec_table = QECTable(projection, state_dim, num_actions, k, knn_capacity)
 

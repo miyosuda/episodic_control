@@ -3,12 +3,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from projection.projection import Projection
 import numpy as np
 
 
 RANDOM_SEED = 1
 
-class Projection(object):
+class RandomProjection(Projection):
   def __init__(self, observation_dim, state_dim):
     # Random projection
     random_state = np.random.RandomState(RANDOM_SEED)
