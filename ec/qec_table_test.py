@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-import unittest
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
-from qec_table import QECTable
+import unittest
+from ec.qec_table import QECTable
 
 class DebugProjection(object):
   def project(self, observation):

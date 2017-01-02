@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import numpy as np
 
 
@@ -19,12 +23,12 @@ class FrameBuffer(object):
 
 
 class EpisodicControlAgent(object):
-  def __init__(self, environment, qec_table, num_actions):
+  def __init__(self, environment, qec_table, num_actions, gamma, epsilon):
     self._environment = environment
-    self._qec_table = qec_table    
+    self._qec_table = qec_table
+    self._num_actions = num_actions
     self._gamma = 0.99
     self._epsilon = 0.005
-    self._num_actions = num_actions
 
     self._reset()
     

@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
+
+
 USE_LAB = True
+if sys.platform == 'darwin':
+  # On MacOSX, use gym instead of deepmind lab for test
+  USE_LAB = False
 
 class Environment(object):
   # cached action size
@@ -11,10 +18,10 @@ class Environment(object):
   @staticmethod
   def create_environment():
     if USE_LAB:
-      import lab_environment
+      from . import lab_environment
       return lab_environment.LabEnvironment()
     else:
-      import gym_environment
+      from . import gym_environment
       return gym_environment.GymEnvironment()
   
   @staticmethod
@@ -23,11 +30,11 @@ class Environment(object):
       return Environment.action_size
     
     if USE_LAB:
-      import lab_environment
+      from . import lab_environment
       Environment.action_size = \
         lab_environment.LabEnvironment.get_action_size()
     else:
-      import gym_environment
+      from . import gym_environment
       Environment.action_size = \
         gym_environment.GymEnvironment.get_action_size()
     return Environment.action_size

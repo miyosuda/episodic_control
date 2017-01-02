@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-import unittest
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
-from knn import KNN
+import unittest
+from ec.knn import KNN
+
 
 class TestKNN(unittest.TestCase):
   def test_peek(self):
