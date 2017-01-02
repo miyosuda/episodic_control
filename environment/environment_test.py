@@ -17,7 +17,6 @@ class TestGameEnvironment(unittest.TestCase):
 
     for i in range(3):
       observation, reward, terminal = environment.step(0)
-      print(observation.shape)
       self.assertTrue( observation.shape == (84,84) )
       scipy.misc.imsave("debug_observation{0}.png".format(i), observation)
 

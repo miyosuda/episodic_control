@@ -23,9 +23,9 @@ class LabEnvironment(environment.Environment):
       'strafe_right': _action(  0,   0,  1,  0, 0, 0, 0),
       'forward':      _action(  0,   0,  0,  1, 0, 0, 0),
       'backward':     _action(  0,   0,  0, -1, 0, 0, 0),
-      'fire':         _action(  0,   0,  0,  0, 1, 0, 0),
-      'jump':         _action(  0,   0,  0,  0, 0, 1, 0),
-      'crouch':       _action(  0,   0,  0,  0, 0, 0, 1)
+      #'fire':        _action(  0,   0,  0,  0, 1, 0, 0),
+      #'jump':        _action(  0,   0,  0,  0, 0, 1, 0),
+      #'crouch':      _action(  0,   0,  0,  0, 0, 0, 1)
   }
 
   ACTION_LIST = ACTIONS.values()

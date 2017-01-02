@@ -17,13 +17,15 @@ import unittest
 import ec.knn_test
 import ec.qec_table_test
 import environment.environment_test
+import projection.vae_test
 
 def get_suite():
   suite = unittest.TestSuite()
-  
+
   suite.addTest(unittest.makeSuite(ec.knn_test.TestKNN))
   suite.addTest(unittest.makeSuite(ec.qec_table_test.TestQECTable))
   suite.addTest(unittest.makeSuite(environment.environment_test.TestGameEnvironment))
+  suite.addTest(unittest.makeSuite(projection.vae_test.TestVAE))
   
   return suite
 
