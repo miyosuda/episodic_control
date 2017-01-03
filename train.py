@@ -19,15 +19,41 @@ epsilon = 0.005
 vae_train_step_size = 400000
 vae_train_batch_size = 100
 
+CHECKPOINT_DIR = 'checkpoints'
+TRAIN_LOG_INTERVAL = 10
+TRAIN_SAVE_INTERVAL = 100
 
+def train_vae(sess, vae_projection, environment):
+  """ Train VAE for projection. """
+  saver = tf.train.Saver()
+  # Load checkpoint
+  step = vae_projection.load(sess, saver, CHECKPOINT_DIR)
 
+  while step < vae_train_step_size:
+    loss = vae_projection.train(sess, environment, vae_train_batch_size)
+
+    if step % TRAIN_LOG_INTERVAL == 0:
+      print("step={0}, loss={1}".format(step, loss))
+
+    step += 1
+    
+    if step % TRAIN_SAVE_INTERVAL == 0:
+      # Save checkpoint
+      vae_projection.save(sess, saver, step, CHECKPOINT_DIR)
+
+def train_episodic_control(agent):
+  # TODO:
+  for i in range(1):
+    ret = agent.step()
+    if ret != None:
+      print(ret)
 
 num_actions = Environment.get_action_size()
 environment = Environment.create_environment()
 
-projection = VAEProjection()
+vae_projection = VAEProjection()
 
-qec_table = QECTable(projection, state_dim, num_actions, k, knn_capacity)
+qec_table = QECTable(vae_projection, state_dim, num_actions, k, knn_capacity)
 
 agent = EpisodicControlAgent(environment, qec_table, num_actions, gamma, epsilon)
 
@@ -36,13 +62,7 @@ sess = tf.Session()
 init = tf.global_variables_initializer()
 sess.run(init)
 
-projection.set_session(sess)
+vae_projection.set_session(sess)
 
-# Train VAE
-projection.train(sess, environment, vae_train_step_size, vae_train_batch_size)
-
-
-for i in range(1):
-  ret = agent.step()
-  if ret != None:
-    print(ret)
+train_vae(sess, vae_projection, environment)
+train_episodic_control(agent)

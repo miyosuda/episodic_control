@@ -5,3 +5,4 @@ checkpoints*/*
 .DS_Store
 memo.txt
 *.png
+reconstr_img
