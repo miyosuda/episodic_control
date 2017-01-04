@@ -20,8 +20,11 @@ vae_train_step_size = 400000
 vae_train_batch_size = 100
 
 CHECKPOINT_DIR = '/tmp/ec_checkpoints'
+RECONSTRUCTION_IMAGE_DIR = '/tmp/ec_reconstr_img'
 TRAIN_LOG_INTERVAL = 10
 TRAIN_SAVE_INTERVAL = 100
+TRAIN_SAVE_INTERVAL = 100
+RECONSTRUCTION_CHECK_INTERVAL = 100
 
 def train_vae(sess, vae_projection, environment):
   """ Train VAE for projection. """
@@ -40,6 +43,10 @@ def train_vae(sess, vae_projection, environment):
     if step % TRAIN_SAVE_INTERVAL == 0:
       # Save checkpoint
       vae_projection.save(sess, saver, step, CHECKPOINT_DIR)
+
+    if step % RECONSTRUCTION_CHECK_INTERVAL == 0:
+      # Create reconstruction image
+      vae_projection.check_reconstruction(sess, environment, 10, RECONSTRUCTION_IMAGE_DIR)
 
 def train_episodic_control(agent):
   # TODO:

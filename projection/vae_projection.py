@@ -8,6 +8,7 @@ import os
 import tensorflow as tf
 from projection.projection import Projection
 from projection.vae import VAE
+from scipy.misc import imsave
 
 
 class VAEProjection(Projection):
@@ -69,3 +70,31 @@ class VAEProjection(Projection):
     # Train with mini-batch of 100 images
     loss = self._vae.train(sess, bach_x)
     return loss
+
+  def check_reconstruction(self, sess, environment,
+                           image_size,
+                           reconstruction_image_dir):
+    """ Check VAE reconstruction by reconstructing images. """
+    
+    if not os.path.exists(reconstruction_image_dir):
+      os.mkdir(reconstruction_image_dir)
+      
+    batch_x = []
+
+    for i in range(image_size):
+      observation = environment.random_step()
+      observation = observation.reshape((84, 84, 1))
+      batch_x.append(observation)
+    
+    batch_x_reconstr = self._vae.reconstruct(sess, batch_x)
+  
+    for i in range(image_size):
+      org_img      = batch_x[i].reshape(84, 84)
+      reconstr_img = batch_x_reconstr[i].reshape(84, 84)
+      org_img_path      = "{0}/img_{1}_org.png".format(reconstruction_image_dir,i)
+      reconstr_img_path = "{0}/img_{1}_rec.png".format(reconstruction_image_dir,i)
+      imsave(org_img_path, org_img)
+      imsave(reconstr_img_path, reconstr_img)
+
+    print("Reconstruction images created.")
+
