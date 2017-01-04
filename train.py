@@ -19,7 +19,7 @@ epsilon = 0.005
 vae_train_step_size = 400000
 vae_train_batch_size = 100
 
-CHECKPOINT_DIR = 'checkpoints'
+CHECKPOINT_DIR = '/tmp/ec_checkpoints'
 TRAIN_LOG_INTERVAL = 10
 TRAIN_SAVE_INTERVAL = 100
 

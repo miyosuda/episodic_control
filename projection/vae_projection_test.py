@@ -11,7 +11,8 @@ from projection.vae_projection import VAEProjection
 from environment.environment import Environment
 
 
-CHECKPOINT_DIR = 'checkpoints'
+CHECKPOINT_DIR = '/tmp/ec_checkpoints'
+RECONSTRUCTION_IMAGE_DIR = '/tmp/ec_reconstr_img'
 
 class TestVAEProjection(tf.test.TestCase):
   def test_vae_reconstruct(self):
@@ -38,11 +39,13 @@ class TestVAEProjection(tf.test.TestCase):
         
       batch_x_reconstr = vae.reconstruct(sess, batch_x)
 
-      if not os.path.exists("reconstr_img"):
-        os.mkdir("reconstr_img")
+      if not os.path.exists(RECONSTRUCTION_IMAGE_DIR):
+        os.mkdir(RECONSTRUCTION_IMAGE_DIR)
 
       for i in range(10):
         org_img      = batch_x[i].reshape(84, 84)
         reconstr_img = batch_x_reconstr[i].reshape(84, 84)
-        imsave("reconstr_img/img_{0}_org.png".format(i),      org_img)
-        imsave("reconstr_img/img_{0}_rec.png".format(i), reconstr_img)
+        org_img_path = "{0}/img_{1}_org.png".format(RECONSTRUCTION_IMAGE_DIR,i)
+        reconstr_img_path = "{0}/img_{1}_rec.png".format(RECONSTRUCTION_IMAGE_DIR,i)
+        imsave(org_img_path, org_img)
+        imsave(reconstr_img_path, reconstr_img)
