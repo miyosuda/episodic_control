@@ -1,3 +1,12 @@
+# Model-Free Episodic Control
+
+Replication DeepMind's paper "Model-Free Episodic Control" with VAE on DeepMind Lab environment. Work in progress.
+Now testing image reconstruction with VAE.
+
+Episodic control code is based on @sudeepraja 's code
+
+https://github.com/sudeepraja/Model-Free-Episodic-Control
+
 ## How to run
 First, dowload and install DeepMind Lab
 ```
