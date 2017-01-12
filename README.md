@@ -1,6 +1,6 @@
 # Model-Free Episodic Control
 
-Replication DeepMind's paper "Model-Free Episodic Control" with VAE on DeepMind Lab environment. 
+Replicating DeepMind's paper "Model-Free Episodic Control" with VAE on DeepMind Lab environment. 
 
 Still work in progress.
 
