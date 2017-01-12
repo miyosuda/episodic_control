@@ -33,10 +33,15 @@ def train_vae(sess, vae_projection, environment):
   step = vae_projection.load(sess, saver, CHECKPOINT_DIR)
 
   while step < vae_train_step_size:
-    loss = vae_projection.train(sess, environment, vae_train_batch_size)
+    loss, reconstr_loss, latent_loss = vae_projection.train(sess,
+                                                            environment,
+                                                            vae_train_batch_size)
 
     if step % TRAIN_LOG_INTERVAL == 0:
-      print("step={0}, loss={1}".format(step, loss))
+      print("step={0}, loss={1}, rec_loss={2}, latent_loss={3}".format(step,
+                                                                       loss,
+                                                                       reconstr_loss,
+                                                                       latent_loss))
 
     step += 1
     

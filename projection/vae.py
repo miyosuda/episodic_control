@@ -9,7 +9,7 @@ import tensorflow as tf
 
 
 class VAE(object):
-  def __init__(self, learning_rate=1e-5):
+  def __init__(self, learning_rate=1e-4):
     self._learning_rate = learning_rate
     
     self._create_network()
@@ -93,8 +93,12 @@ class VAE(object):
 
     h_fc1 = tf.nn.relu(tf.matmul(h_conv4_flat, W_fc1) + b_fc1)
     
-    z_mean         = tf.tanh(tf.matmul(h_fc1, W_fcm) + b_fcm)
-    z_log_sigma_sq = tf.tanh(tf.matmul(h_fc1, W_fcs) + b_fcs)
+    #z_mean         = tf.tanh(tf.matmul(h_fc1, W_fcm) + b_fcm) # TODO: linear output?
+    #z_log_sigma_sq = tf.tanh(tf.matmul(h_fc1, W_fcs) + b_fcs) # TODO: linear output?
+
+    z_mean         = tf.matmul(h_fc1, W_fcm) + b_fcm
+    z_log_sigma_sq = tf.matmul(h_fc1, W_fcs) + b_fcs
+    
     return (z_mean, z_log_sigma_sq)
 
   def _create_generator_network(self, z):
@@ -146,14 +150,17 @@ class VAE(object):
     reconstr_loss = tf.reduce_sum( (0.5/tf.exp(self.x_reconstr_log_sigma_sq) * tf.square(self.x - self.x_reconstr_mean)) +
                                    (0.5 * math.log(2.0 * math.pi) + 0.5 * self.x_reconstr_log_sigma_sq),
                                    [1,2,3])
+    # average over batch
+    self.reconstr_loss = tf.reduce_mean(reconstr_loss)
     
     # Latent loss
     beta = 1.0
     latent_loss = beta * -0.5 * tf.reduce_sum(1 + self.z_log_sigma_sq 
                                               - tf.square(self.z_mean) 
                                               - tf.exp(self.z_log_sigma_sq), 1)
+    self.latent_loss = tf.reduce_mean(latent_loss)
     
-    self.loss = tf.reduce_mean(reconstr_loss + latent_loss)   # average over batch
+    self.loss = self.reconstr_loss + self.latent_loss
 
     self.optimizer = tf.train.RMSPropOptimizer(
       learning_rate=self._learning_rate).minimize(self.loss)
@@ -164,9 +171,12 @@ class VAE(object):
     Returns:
       Loss of mini-batch.
     """
-    _, loss = sess.run((self.optimizer, self.loss), 
-                       feed_dict={self.x: X})
-    return loss
+    _, loss, reconstr_loss, latent_loss = sess.run((self.optimizer,
+                                                    self.loss,
+                                                    self.reconstr_loss,
+                                                    self.latent_loss),
+                                                   feed_dict={self.x: X})
+    return loss, reconstr_loss, latent_loss
 
   def transform(self, sess, X):
     """Transform X into latent space.

@@ -68,8 +68,8 @@ class VAEProjection(Projection):
       bach_x.append(observation)
       
     # Train with mini-batch of 100 images
-    loss = self._vae.train(sess, bach_x)
-    return loss
+    loss, reconstr_loss, latent_loss = self._vae.train(sess, bach_x)
+    return loss, reconstr_loss, latent_loss
 
   def check_reconstruction(self, sess, environment,
                            image_size,

@@ -37,7 +37,8 @@ class LabEnvironment(environment.Environment):
   def __init__(self):
     environment.Environment.__init__(self)
 
-    level = 'seekavoid_arena_01'
+    #level = 'seekavoid_arena_01'
+    level = 'seekavoid_arena_custom'
 
     self._env = deepmind_lab.Lab(
       level,
